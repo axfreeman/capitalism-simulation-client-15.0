@@ -38,15 +38,11 @@ func CreateSimulation(w http.ResponseWriter, r *http.Request) {
 	requestedSimulation, _ := strconv.Atoi(s)
 	utils.TraceInfof(utils.Green, "Request to clone simulation %d", requestedSimulation)
 
-	// Ask the server to create the clone and tell us the simulation id
-	// Do not load it yet
+	// Ask server to create clone and supply simulation id. Do not load tables yet
 	if body, err = api.UserGetRequest(user.ApiKey, `/clone/`+s); err != nil {
 		ReportError(user, w, fmt.Sprintf("There was a problem. Please report this to the developer%v", err))
 		return
 	}
-
-	utils.TraceInfo(utils.Green, ("Server responded to clone request with the following message:"))
-	utils.TraceInfo(utils.Green, ` `+string(body))
 
 	// read the simulation id
 	var result CloneResult
@@ -55,18 +51,33 @@ func CreateSimulation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	utils.TraceInfo(utils.Green, ("Server responded to clone request:"))
+	utils.TraceInfo(utils.Green, ` `+string(body))
+
 	// Set the current simulation
-	utils.TraceInfof(utils.Green, "Setting current simulation to be %d", result.Simulation_id)
+	utils.TraceInfof(utils.Green, "Setting current simulation to %d", result.Simulation_id)
 	user.CurrentSimulationID = result.Simulation_id
 	utils.TraceInfo(utils.Green, ("Setting current state to DEMAND"))
 	user.Set_current_state("DEMAND")
 
-	// Fetch the whole (new) TableSet from the server
-	// (until now we only told the server to create it - now we want it)
+	// Fetch everything for the new simulation from the server.
+	// (until now we only told the server to create it - now we want it).
+	// Add this to the user's Tables
 	if err = api.FetchUserObjects(user); err != nil {
 		ReportError(user, w, fmt.Sprintf("There was a problem. Please report this to the developer\n%v", err))
 		return
 	}
+
+	// A LITTLE TEST
+	// TODO SUBSTITUTE THIS FOR ALL THE CODE ABOVE, ONCE IT IS WORKING
+	simulation, tables, err := api.FetchSimulationAndTables(user.ApiKey, result.Simulation_id)
+	if err != nil {
+		utils.TraceErrorf("An Experimental Function could not retrieve the requested data with apikey %s and simulation id %d", user.ApiKey, result.Simulation_id)
+	}
+	simstring, _ := json.MarshalIndent(simulation, " ", " ")
+	utils.TraceInfof(utils.BrightYellow, "FetchSimulationAndTables retrieved the simulation %s", string(simstring))
+	tablestring, _ := json.MarshalIndent(tables, " ", " ")
+	utils.TraceInfof(utils.BrightYellow, "FetchSimulationAndTables retrieved the simulation %s", string(tablestring))
 
 	// Initialise the timeStamp so that we are viewing the first TableSet.
 	// As the user moves through the circuit, this timestamp will move forwards.

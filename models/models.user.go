@@ -117,8 +117,9 @@ type TableStruct struct {
 // Indexed by the name of the table (commodity, industry, etc)
 type TableSet map[string]TableStruct
 
-// Constructor for a TableSet object
-// Tables are "commodities", "industries", etc
+// Constructor for a TableSet. This contains all the Tables in one stage
+// required for one stage of one simulation. Tables are "commodities",
+// "industries", etc
 func NewTableSet() TableSet {
 	return map[string]TableStruct{
 		"commodities": {

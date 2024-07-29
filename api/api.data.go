@@ -9,9 +9,10 @@ import (
 	"fmt"
 	"gorilla-client/models"
 	"gorilla-client/utils"
+	"strconv"
 )
 
-// Retrieves the data for a single  table from the server.
+// Retrieves the data for a single table from the server.
 // Unmarshals the server response into the DataList of the receiver
 //
 //	apiKey: sent to the server to identify and authorize the user
@@ -52,7 +53,7 @@ func FetchUserObjects(user *models.User) error {
 	var err error
 	utils.TraceInfof(utils.BrightCyan, "Fetching details from server for user %s", user.UserName)
 
-	// Fetch the simulation object
+	// Fetch the simulation table
 	// NOTE the api server identifies the user from the apiKey
 	// This key is supplied by the api server
 	err = Fetch(user.ApiKey, &user.Simulation)
@@ -72,4 +73,42 @@ func FetchUserObjects(user *models.User) error {
 	}
 	utils.TraceInfo(utils.BrightCyan, "Refresh complete")
 	return nil
+}
+
+// Fetches a simulation and all associated tables from the server.
+// Creates new objects that hold the results. The parameters uniquely
+// identify the required data for the api server to process.
+//
+//	apikey: uniquely identifies the user
+//	simulationID: uniquely identifies the simulation belonging to the user
+//
+//	returns:
+//	 Pointer to a simulation of type TableStruct
+//	 Pointer to a TableSet containing the Tables in this simulation
+//	 err if anything goes wrong
+func FetchSimulationAndTables(apiKey string, simulationID int) (*models.Simulation, *models.TableSet, error) {
+	newSimulation := new(models.Simulation)
+	newTableStruct := models.TableStruct{
+		ApiUrl: `/simulations/by_id/` + strconv.Itoa(simulationID),
+		Table:  newSimulation,
+		Name:   `Simulation`,
+	}
+
+	err := Fetch(apiKey, &newTableStruct)
+	if err != nil {
+		utils.TraceError("Simulations could not be fetched from the server")
+		return nil, nil, errors.New("simulations could not be fetched from the server")
+	}
+
+	//TODO NewTableSet should return a pointer
+	newTableSet := models.NewTableSet()
+
+	for key, value := range newTableSet {
+		err = Fetch(apiKey, &value)
+		if err != nil {
+			utils.TraceErrorf("Could not retrieve server data for a new tableset with key %s", key)
+		}
+	}
+
+	return newSimulation, &newTableSet, nil
 }

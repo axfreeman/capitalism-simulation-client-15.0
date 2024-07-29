@@ -60,8 +60,8 @@ func TraceError(message string) error {
 //	startColour: the colour of the message
 //	message: the message, which must contain one formatting symbol
 //	details: the variable to be printed
-func TraceErrorf(message string, details any) error {
-	return TraceError(fmt.Sprintf(message, details))
+func TraceErrorf(message string, details ...any) error {
+	return TraceError(fmt.Sprintf(message, details...))
 }
 
 // convenience function to include a variable in a TraceInfo message
