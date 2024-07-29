@@ -231,8 +231,7 @@ func (s Industry_Stock) CommodityName() string {
 	return `UNKNOWN COMMODITY`
 }
 
-// return the commodity object that the given stock consists of
-// WAS 	rows, err := db.SDB.Queryx("SELECT * FROM commodities where Id = ?", i.Commodity_id)
+// return the Commodity that the given stock consists of
 func (s Industry_Stock) Commodity() *Commodity {
 	username := s.UserName
 	commodityList := *ClientLoggedInUsers[username].Commodities()
@@ -367,7 +366,7 @@ func (u User) Set_current_state(new_state string) {
 	}
 }
 
-// Create a CommodityView object for display in a template
+// Create a CommodityView for display in a template
 // taking data from two Commodity objects; one being viewed now,
 // the other showing the state of the simulation at some time in the 'past'
 // TODO the views are not explicitly timestamped. As a result I
@@ -404,7 +403,7 @@ func NewCommodityViews(v *[]Commodity, c *[]Commodity) *[]CommodityView {
 	return &newViews
 }
 
-// Create an IndustryView object for display in a template
+// Create an IndustryView for display in a template
 // taking data from two Industry objects; one being viewed now,
 // the other showing the state of the simulation at some time in the 'past'.
 //

@@ -19,7 +19,7 @@ type User struct {
 	TimeStamp           int         // Indexes Datasets. Selects the stage that the simulation has reached
 	ViewedTimeStamp     int         // Indexes Datasets. Selects what the user is viewing
 	ComparatorTimeStamp int         // Indexes Datasets. Selects what Viewed items are compared with.
-	Simulation          TableObject // Details of the current simulation
+	Simulation          TableStruct // Details of the current simulation
 	IsLocked            bool        `json:"is_locked"` // TODO REDUNDANT
 }
 
@@ -36,7 +36,7 @@ func NewUser(username string) *User {
 		ComparatorTimeStamp: 0,
 		TableSets:           []*TableSet{},
 		IsLocked:            false,
-		Simulation: TableObject{
+		Simulation: TableStruct{
 			ApiUrl: `/simulations`,
 			Table:  new([]Simulation),
 		},
@@ -65,7 +65,7 @@ func (u RegisteredUser) Write() string {
 	return string(result)
 }
 
-// Convenience type with commonly-used objects, to pass into templates
+// Commonly-used Views and Tables, to pass into templates
 type OutputData struct {
 	Title           string
 	Simulations     *[]Simulation
@@ -92,7 +92,7 @@ func (u *User) AsString() string {
 
 // Defines a data object to be synchronised with the server
 // ApiUrl is the endpoint on the server which fetches the Table
-type TableObject struct {
+type TableStruct struct {
 	ApiUrl string
 	Table  interface{} //All the data for one Table (eg Commodity, Industry, etc)
 }
@@ -101,13 +101,12 @@ var ClientLoggedInUsers = make(map[string]*User) // Every user's simulation data
 
 // Contains all the tables in one stage of one simulation
 // Indexed by the name of the table (commodity, industry, etc)
-type TableSet map[string]TableObject
+type TableSet map[string]TableStruct
 
-// Constructor for a dataset object
-// objects are "commodities", "industries", etc
-// TODO apiKey seems redundant. Why doesn't the compiler object?
+// Constructor for a TableSet object
+// Tables are "commodities", "industries", etc
 func NewTableSet() TableSet {
-	return map[string]TableObject{
+	return map[string]TableStruct{
 		"commodities": {
 			ApiUrl: `/commodity`,
 			Table:  new([]Commodity),

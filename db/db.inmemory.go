@@ -17,7 +17,7 @@ import (
 //  CreateUser adds a user to the store
 //  FindUser finds a user in the store
 
-// An imdbStruct object is a single database.
+// An imdbStruct is a single database.
 // it should be created using NewDB()
 type imdbStruct struct {
 	store map[string]*models.RegisteredUser
@@ -32,15 +32,15 @@ func NewImDB() imdbStruct {
 
 // Implements DataHandler Create(*RegisteredUser)
 //
-//	u: the address of a user object
+//	u: the address of a RegisteredUser
+//	returns: error (nil if create succeeds)
 func (s imdbStruct) CreateRegisteredUser(u *models.RegisteredUser) (err error) {
-	name := u.UserName
-	utils.TraceInfo(utils.BrightMagenta, fmt.Sprintf("User %s has been added to the local Database", name))
 	// Check for exists already
-	if _, ok := s.store[name]; ok {
+	if _, ok := s.store[u.UserName]; ok {
 		return utils.TraceError(fmt.Sprintf("user %s already exists", u.UserName))
 	}
-	s.store[name] = u
+	s.store[u.UserName] = u
+	utils.TraceInfo(utils.BrightMagenta, fmt.Sprintf("User %s has been added to the local Database", u.UserName))
 	return nil
 }
 

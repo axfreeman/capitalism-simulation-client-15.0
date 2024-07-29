@@ -19,7 +19,7 @@ import (
 //  CreateUser adds a user to the store
 //  FindUser finds a user in the store
 
-// A RemoteDBStruct object is a single database.
+// A RemoteDBStruct defines a single database.
 // it should be created using NewDB()
 type SQLDbStruct struct {
 	db *sql.DB
@@ -67,7 +67,7 @@ func NewSQLDB() SQLDbStruct {
 
 // Implements DataHandler Create(*User)
 //
-//	u: the address of a user object
+//	u: the address of a RegisteredUser
 func (s SQLDbStruct) CreateRegisteredUser(u *models.RegisteredUser) error {
 	var err error
 	insertSQL := "INSERT INTO users (username,password,apikey) VALUES(?,?,?)"

@@ -15,7 +15,7 @@ import (
 //  CreateUser adds a user to the store
 //  FindUser finds a user in the store
 
-// A RemoteDBStruct object is a single database.
+// A RemoteDBStruct defines a single database.
 // it should be created using NewDB()
 type RemoteDbStruct struct {
 	store map[string]*models.User
@@ -30,7 +30,7 @@ func NewRemoteDB() RemoteDbStruct {
 
 // Implements DataHandler Create(*User)
 //
-//	u: the address of a user object
+//	u: the address of a User
 func (s RemoteDbStruct) CreateUser(u *models.User) (err error) {
 	name := u.UserName
 	utils.TraceInfo(utils.BrightMagenta, fmt.Sprintf("User %s has been added to the local Database", name))

@@ -60,16 +60,16 @@ func CreateSimulation(w http.ResponseWriter, r *http.Request) {
 	utils.TraceInfo(utils.Green, ("Setting current state to DEMAND"))
 	user.Set_current_state("DEMAND")
 
-	// Fetch the whole (new) dataset from the server
+	// Fetch the whole (new) TableSet from the server
 	// (until now we only told the server to create it - now we want it)
 	if err = api.FetchUserObjects(user); err != nil {
 		ReportError(user, w, fmt.Sprintf("There was a problem. Please report this to the developer\n%v", err))
 		return
 	}
 
-	// Initialise the timeStamp so that we are viewing the first dataset.
+	// Initialise the timeStamp so that we are viewing the first TableSet.
 	// As the user moves through the circuit, this timestamp will move forwards.
-	// Each time we move forward, a new dataset will be created.
+	// Each time we move forward, a new TableSet will be created.
 	// This allows the user to view and compare with previous stages of the simulation.
 	user.ViewedTimeStamp = 0
 	Tpl.ExecuteTemplate(w, user.CurrentPage, user.TemplateData(""))

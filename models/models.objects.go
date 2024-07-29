@@ -224,7 +224,7 @@ type HistoryItem struct {
 }
 
 func NewHistoryItem() HistoryItem {
-	NewItem := HistoryItem{
+	NewHistoryItem := HistoryItem{
 		Time_stamp:        0,
 		State:             "Demand",
 		SimulationList:    make([]Simulation, 0),
@@ -235,7 +235,7 @@ func NewHistoryItem() HistoryItem {
 		ClassStockList:    make([]Class_Stock, 0),
 		TraceList:         make([]Trace, 0),
 	}
-	return NewItem
+	return NewHistoryItem
 }
 
 var SimulationList []Simulation

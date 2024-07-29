@@ -42,7 +42,7 @@ func ActionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// The action was taken. Advance the TimeStamp and the ViewedTimeStamp.
-	// Create a new Dataset. Place the next fetched dataset in the new
+	// Create a new TableSet. Place the next fetched TableSet in the new
 	// record, preserving the previous record.
 	new_dataset := models.NewTableSet()
 
