@@ -90,8 +90,10 @@ func (u *User) AsString() string {
 	return string(s)
 }
 
-// Defines a data object to be synchronised with the server
-// ApiUrl is the endpoint on the server which fetches the Table
+// Defines Table to be synchronised with the server
+//
+//	ApiUrl:the endpoint on the server which fetches the Table
+//	Table: one of Commodity, Industry, Class, etc etc
 type TableStruct struct {
 	ApiUrl string
 	Table  interface{} //All the data for one Table (eg Commodity, Industry, etc)

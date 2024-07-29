@@ -1,8 +1,8 @@
 package models
 
-// Wrappers for the object lists
+// Wrappers for lists of Tables
 
-// List of the user's simulations.
+// List of the user's Simulations.
 //
 //	u: the user
 //	returns:
