@@ -17,10 +17,10 @@ import (
 //	d: target of the data
 //	Return: nil if it worked
 //	Return: error string if there was an error
-func Fetch(u *models.User, d *models.TableStruct) error {
-	utils.TraceInfo(utils.BrightCyan, fmt.Sprintf("Fetching a table from server with api key %s and path %s", u.ApiKey, d.ApiUrl))
+func Fetch(apiKey string, d *models.TableStruct) error {
+	utils.TraceInfo(utils.BrightCyan, fmt.Sprintf("Fetching a table from server with api key %s and path %s", apiKey, d.ApiUrl))
 
-	response, err := UserGetRequest(u.ApiKey, d.ApiUrl)
+	response, err := UserGetRequest(apiKey, d.ApiUrl)
 	if err != nil {
 		errorReport := fmt.Sprintf("ServerRequest produced the error %v", err)
 		utils.TraceInfo(utils.Red, errorReport)
@@ -51,7 +51,7 @@ func FetchUserObjects(user *models.User) error {
 	utils.TraceInfof(utils.BrightCyan, "Fetching details from server for user %s", user.UserName)
 
 	// Fetch the simulation object
-	err = Fetch(user, &user.Simulation)
+	err = Fetch(user.ApiKey, &user.Simulation)
 	if err != nil {
 		utils.TraceError("Simulations could not be fetched from the server")
 		return errors.New("simulations could not be fetched from the server")
@@ -61,7 +61,7 @@ func FetchUserObjects(user *models.User) error {
 	// Reminder - a tableset contains all tables at one stage of the simulation.
 	tableset := *user.TableSets[user.TimeStamp]
 	for key, value := range tableset {
-		err = Fetch(user, &value)
+		err = Fetch(user.ApiKey, &value)
 		if err != nil {
 			utils.TraceErrorf("Could not retrieve server data for the new tableset with key %s", key)
 		}
