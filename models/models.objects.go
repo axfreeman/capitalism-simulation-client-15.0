@@ -208,34 +208,4 @@ type Class_Stock struct {
 // or editing existing ones.
 var TemplateList []Simulation
 
-// a HistoryItem contains all the information describing a stage
-// of the Simulation. The UserData object contains a map[int]HistoryItem
-// which lets the user review past stages of the current Simulation
-type HistoryItem struct {
-	SimulationList    []Simulation
-	CommodityList     []Commodity
-	IndustryList      []Industry
-	ClassList         []Class
-	IndustryStockList []Industry_Stock
-	ClassStockList    []Class_Stock
-	TraceList         []Trace
-	Time_stamp        int
-	State             string
-}
-
-func NewHistoryItem() HistoryItem {
-	NewHistoryItem := HistoryItem{
-		Time_stamp:        0,
-		State:             "Demand",
-		SimulationList:    make([]Simulation, 0),
-		CommodityList:     make([]Commodity, 0),
-		IndustryList:      make([]Industry, 0),
-		ClassList:         make([]Class, 0),
-		IndustryStockList: make([]Industry_Stock, 0),
-		ClassStockList:    make([]Class_Stock, 0),
-		TraceList:         make([]Trace, 0),
-	}
-	return NewHistoryItem
-}
-
 var SimulationList []Simulation
