@@ -46,6 +46,9 @@ func NewUser(username string) *User {
 	return &new_user
 }
 
+// List of LoggedInUsers
+var ClientLoggedInUsers = make(map[string]*User) // Every user's simulation data
+
 // A RegisteredUser is used for local authentication
 // A User is a logged-in RegisteredUser
 type RegisteredUser struct {
@@ -94,12 +97,12 @@ func (u *User) AsString() string {
 //
 //	ApiUrl:the endpoint on the server which fetches the Table
 //	Table: one of Commodity, Industry, Class, etc etc
+//	Name: convenience field for diagnostics
 type TableStruct struct {
-	ApiUrl string
+	ApiUrl string      //Url to use when requesting data from the server
 	Table  interface{} //All the data for one Table (eg Commodity, Industry, etc)
+	Name   string      //The name of the table (for convenience, may be redundant)
 }
-
-var ClientLoggedInUsers = make(map[string]*User) // Every user's simulation data
 
 // Contains all the tables in one stage of one simulation
 // Indexed by the name of the table (commodity, industry, etc)
@@ -112,26 +115,32 @@ func NewTableSet() TableSet {
 		"commodities": {
 			ApiUrl: `/commodity`,
 			Table:  new([]Commodity),
+			Name:   `Commodity`,
 		},
 		"industries": {
 			ApiUrl: `/industry`,
 			Table:  new([]Industry),
+			Name:   `Industry`,
 		},
 		"classes": {
 			ApiUrl: `/classes`,
 			Table:  new([]Class),
+			Name:   `Class`,
 		},
 		"industry stocks": {
 			ApiUrl: `/stocks/industry`,
 			Table:  new([]Industry_Stock),
+			Name:   `Industry_Stock`,
 		},
 		"class stocks": {
 			ApiUrl: `/stocks/class`,
 			Table:  new([]Class_Stock),
+			Name:   `Class_Stock`,
 		},
 		"trace": {
 			ApiUrl: `/trace`,
 			Table:  new([]Trace),
+			Name:   `Trace`,
 		},
 	}
 }
