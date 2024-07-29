@@ -50,7 +50,7 @@ func FetchUserObjects(user *models.User) error {
 	var err error
 	utils.TraceInfof(utils.BrightCyan, "Fetching details from server for user %s", user.UserName)
 
-	// Fetch the simulation table
+	// Fetch the simulation object
 	err = Fetch(user, &user.Simulation)
 	if err != nil {
 		utils.TraceError("Simulations could not be fetched from the server")

@@ -39,6 +39,7 @@ func CreateSimulation(w http.ResponseWriter, r *http.Request) {
 	utils.TraceInfof(utils.Green, "Request to clone simulation %d", requestedSimulation)
 
 	// Ask the server to create the clone and tell us the simulation id
+	// Do not load it yet
 	if body, err = api.UserGetRequest(user.ApiKey, `/clone/`+s); err != nil {
 		ReportError(user, w, fmt.Sprintf("There was a problem. Please report this to the developer%v", err))
 		return

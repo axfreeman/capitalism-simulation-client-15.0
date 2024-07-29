@@ -8,24 +8,30 @@ import (
 
 // A User is a 'fullblown' player with everything involved in a simulation
 type User struct {
-	UserName            string      `json:"username"` // Repeats the key in the map,for ease of use
-	Email               string      `json:"email"`
-	ApiKey              string      `json:"api_key"` // The api key allocated to this user
-	Password            string      `json:"password"`
-	Role                string      `json:"role"`
-	CurrentSimulationID int         `json:"current_simulation_id"` // the id of the simulation that this user is currently using
-	CurrentPage         string      // Remember what the user was looking at (used when an action is requested)
-	TableSets           []*TableSet // Repository for the data objects generated during the simulation
-	TimeStamp           int         // Indexes Datasets. Selects the stage that the simulation has reached
-	ViewedTimeStamp     int         // Indexes Datasets. Selects what the user is viewing
-	ComparatorTimeStamp int         // Indexes Datasets. Selects what Viewed items are compared with.
-	Simulation          TableStruct // Details of the current simulation
-	IsLocked            bool        `json:"is_locked"` // TODO REDUNDANT
+	UserName            string             `json:"username"` // Repeats the key in the map,for ease of use
+	Email               string             `json:"email"`
+	ApiKey              string             `json:"api_key"` // The api key allocated to this user
+	Password            string             `json:"password"`
+	Role                string             `json:"role"`
+	CurrentSimulationID int                `json:"current_simulation_id"` // the id of the simulation that this user is currently using
+	CurrentPage         string             // Remember what the user was looking at (used when an action is requested)
+	TableSets           []*TableSet        // Repository for the data objects generated during the simulation
+	TableRepositories   []*TableRepository // List of this user's repositories, indexed by the Simulation ID
+	TimeStamp           int                // Indexes Datasets. Selects the stage that the simulation has reached
+	ViewedTimeStamp     int                // Indexes Datasets. Selects what the user is viewing
+	ComparatorTimeStamp int                // Indexes Datasets. Selects what Viewed items are compared with.
+	Simulation          TableStruct        // Details of the current simulation
+	IsLocked            bool               `json:"is_locked"` // TODO REDUNDANT
+}
+
+type TableRepository struct {
+	SimulationID int         // ID of the simulation that this repository represents
+	TableSets    []*TableSet // Repository for the data objects generated during one simulation
 }
 
 // Constructor for a standard initial User.
 func NewUser(username string) *User {
-	new_user := User{
+	newUser := User{
 		UserName:            username,
 		Password:            "",
 		ApiKey:              "",
@@ -35,15 +41,18 @@ func NewUser(username string) *User {
 		ViewedTimeStamp:     0,
 		ComparatorTimeStamp: 0,
 		TableSets:           []*TableSet{},
+		TableRepositories:   []*TableRepository{},
 		IsLocked:            false,
 		Simulation: TableStruct{
 			ApiUrl: `/simulations`,
 			Table:  new([]Simulation),
 		},
 	}
-	new_dataset := NewTableSet()
-	new_user.TableSets = append(new_user.TableSets, &new_dataset)
-	return &new_user
+	newTableSet := NewTableSet()
+	newUser.TableSets = append(newUser.TableSets, &newTableSet)
+	// newTableRepository := TableRepository{}
+	// newUser.TableRepositories = append(newUser.TableRepositories, &newTableRepository)
+	return &newUser
 }
 
 // List of LoggedInUsers
@@ -55,7 +64,7 @@ type RegisteredUser struct {
 	UserName string
 	ApiKey   string `json:"api_key"` // The api key will be retrieved from the server
 	Password string // hashed
-	Cookie   string // supplied by the register process TODO NOT USED DEPRECATE
+	Cookie   string // TODO NOT USED DEPRECATE
 }
 
 // A RegisteredUserServerRequest is used to send a RegisteredUser to the server
