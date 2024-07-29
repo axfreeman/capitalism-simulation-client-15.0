@@ -63,21 +63,16 @@ func CreateSimulation(w http.ResponseWriter, r *http.Request) {
 	// Fetch everything for the new simulation from the server.
 	// (until now we only told the server to create it - now we want it).
 	// Add this to the user's Tables
-	if err = api.FetchUserObjects(user); err != nil {
-		ReportError(user, w, fmt.Sprintf("There was a problem. Please report this to the developer\n%v", err))
-		return
-	}
-
-	// A LITTLE TEST
-	// TODO SUBSTITUTE THIS FOR ALL THE CODE ABOVE, ONCE IT IS WORKING
-	simulation, tables, err := api.FetchSimulationAndTables(user.ApiKey, result.Simulation_id)
+	err = api.FetchTables(user)
 	if err != nil {
 		utils.TraceErrorf("An Experimental Function could not retrieve the requested data with apikey %s and simulation id %d", user.ApiKey, result.Simulation_id)
+		ReportError(user, w, "oops")
+		return
 	}
-	simstring, _ := json.MarshalIndent(simulation, " ", " ")
-	utils.TraceInfof(utils.BrightYellow, "FetchSimulationAndTables retrieved the simulation %s", string(simstring))
-	tablestring, _ := json.MarshalIndent(tables, " ", " ")
-	utils.TraceInfof(utils.BrightYellow, "FetchSimulationAndTables retrieved the simulation %s", string(tablestring))
+	simstring, _ := json.MarshalIndent(user.Simulation, " ", " ")
+	utils.TraceInfof(utils.BrightYellow, "FetchTables retrieved the simulation %s", string(simstring))
+	tablestring, _ := json.MarshalIndent(user.TableSets, " ", " ")
+	utils.TraceInfof(utils.BrightYellow, "FetchTables retrieved the simulation %s", string(tablestring))
 
 	// Initialise the timeStamp so that we are viewing the first TableSet.
 	// As the user moves through the circuit, this timestamp will move forwards.

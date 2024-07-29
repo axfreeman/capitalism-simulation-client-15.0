@@ -20,7 +20,7 @@ type User struct {
 	TimeStamp           int                // Indexes Datasets. Selects the stage that the simulation has reached
 	ViewedTimeStamp     int                // Indexes Datasets. Selects what the user is viewing
 	ComparatorTimeStamp int                // Indexes Datasets. Selects what Viewed items are compared with.
-	Simulation          TableStruct        // Details of the current simulation
+	Simulation          TableStruct        // Details of all simulations
 	IsLocked            bool               `json:"is_locked"` // TODO REDUNDANT
 }
 
@@ -46,10 +46,11 @@ func NewUser(username string) *User {
 		Simulation: TableStruct{
 			ApiUrl: `/simulations`,
 			Table:  new([]Simulation),
+			Name:   "Simulations",
 		},
 	}
-	newTableSet := NewTableSet()
-	newUser.TableSets = append(newUser.TableSets, &newTableSet)
+	// newTableSet := NewTableSet()
+	// newUser.TableSets = append(newUser.TableSets, &newTableSet)
 	// newTableRepository := TableRepository{}
 	// newUser.TableRepositories = append(newUser.TableRepositories, &newTableRepository)
 	return &newUser
@@ -147,11 +148,12 @@ func NewTableSet() TableSet {
 			Table:  new([]Class_Stock),
 			Name:   `Class_Stock`,
 		},
-		"trace": {
-			ApiUrl: `/trace`,
-			Table:  new([]Trace),
-			Name:   `Trace`,
-		},
+		// TODO this is very verbose. Restore it later
+		// "trace": {
+		// 	ApiUrl: `/trace`,
+		// 	Table:  new([]Trace),
+		// 	Name:   `Trace`,
+		// },
 	}
 }
 

@@ -61,7 +61,14 @@ func (u User) ClassStocks(timeStamp int) *[]Class_Stock {
 
 // Wrapper for the TraceList
 func (u User) Traces(timeStamp int) *[]Trace {
-	return (*u.TableSets[timeStamp])["trace"].Table.(*[]Trace)
+	if len(u.TableSets) == 0 {
+		return nil
+	}
+	table, ok := (*u.TableSets[timeStamp])["trace"]
+	if !ok {
+		return nil
+	}
+	return table.Table.(*[]Trace)
 }
 
 // supplies outputData to be passed into Templates for display

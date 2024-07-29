@@ -61,7 +61,7 @@ func ActionHandler(w http.ResponseWriter, r *http.Request) {
 	user.ViewedTimeStamp = user.TimeStamp
 
 	// Now refresh the data from the server
-	err = api.FetchUserObjects(user)
+	err = api.FetchTables(user)
 	if err != nil {
 		ReportError(user, w, "The server completed the action but did not send back any data.")
 		return

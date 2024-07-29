@@ -170,7 +170,7 @@ func LoginAuthHandler(w http.ResponseWriter, r *http.Request) {
 	//Grab this user's data from the server TODO degrade gracefully if this doesn't work
 	utils.TraceInfof(utils.BrightGreen, "the user's current simulation is %d", user.CurrentSimulationID)
 	if user.CurrentSimulationID != 0 {
-		api.FetchUserObjects(user)
+		api.FetchTables(user)
 	}
 
 	// display the welcome screen
