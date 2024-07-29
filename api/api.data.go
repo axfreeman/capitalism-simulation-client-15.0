@@ -59,19 +59,6 @@ func FetchUserObjects(user *models.User) error {
 		return errors.New("simulations could not be fetched from the server")
 	}
 
-	// NEW: UNDER DEVELOPMENT
-	// Create a new simulation object and fetch it
-	new_simulation := models.TableObject{
-		ApiUrl: `/simulations/current`,
-		Table:  new([]models.Simulation),
-	}
-	err = Fetch(user, &new_simulation)
-	user.Simulations = append(user.Simulations, &new_simulation)
-	if err != nil {
-		utils.TraceError("Simulation could not be fetched from the server")
-		return errors.New("simulation could not be fetched from the server")
-	}
-
 	// Fetch all the user data in the dataset for the current stage of the current simulation
 	// Reminder: a dataset is a repository for all objects at one stage of the simulation.
 	dataSet := *user.TableSets[user.TimeStamp]

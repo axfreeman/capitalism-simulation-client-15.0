@@ -21,7 +21,7 @@ type CloneResult struct {
 // Creates a new simulation for the user, from the template specified by the 'id' parameter.
 // This can be scaled up when and if login is introduced.
 func CreateSimulation(w http.ResponseWriter, r *http.Request) {
-	var simAsString string
+	var s string
 	var ok bool
 	var err error
 	var body []byte
@@ -30,16 +30,16 @@ func CreateSimulation(w http.ResponseWriter, r *http.Request) {
 	utils.TraceInfof(utils.Green, "Clone Simulation was called by user %s", user.UserName)
 	user.CurrentPage = "user-dashboard.html"
 
-	if simAsString, ok = mux.Vars(r)["id"]; !ok {
+	if s, ok = mux.Vars(r)["id"]; !ok {
 		ReportError(user, w, "Unrecognisable URL. Please report this to the developer")
 		return
 	}
 
-	requestedSimulation, _ := strconv.Atoi(simAsString)
+	requestedSimulation, _ := strconv.Atoi(s)
 	utils.TraceInfof(utils.Green, "Request to clone simulation %d", requestedSimulation)
 
 	// Ask the server to create the clone and tell us the simulation id
-	if body, err = api.UserGetRequest(user.ApiKey, `/clone/`+simAsString); err != nil {
+	if body, err = api.UserGetRequest(user.ApiKey, `/clone/`+s); err != nil {
 		ReportError(user, w, fmt.Sprintf("There was a problem. Please report this to the developer%v", err))
 		return
 	}
