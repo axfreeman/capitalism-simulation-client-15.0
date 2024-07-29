@@ -14,7 +14,9 @@ import (
 // Retrieves the data for a single  table from the server.
 // Unmarshals the server response into the DataList of the receiver
 //
+//	apiKey: sent to the server to identify and authorize the user
 //	d: target of the data
+//
 //	Return: nil if it worked
 //	Return: error string if there was an error
 func Fetch(apiKey string, d *models.TableStruct) error {
@@ -51,6 +53,8 @@ func FetchUserObjects(user *models.User) error {
 	utils.TraceInfof(utils.BrightCyan, "Fetching details from server for user %s", user.UserName)
 
 	// Fetch the simulation object
+	// NOTE the api server identifies the user from the apiKey
+	// This key is supplied by the api server
 	err = Fetch(user.ApiKey, &user.Simulation)
 	if err != nil {
 		utils.TraceError("Simulations could not be fetched from the server")
