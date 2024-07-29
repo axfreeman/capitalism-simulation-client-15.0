@@ -1,0 +1,48 @@
+// PATH: go-auth/routes/auth.go
+
+package routes
+
+import (
+	"gorilla-client/controllers"
+	"net/http"
+
+	"github.com/gorilla/mux"
+)
+
+var Router *mux.Router
+
+func AuthRoutes() {
+	// Export router to globally accessible variable
+	Router = mux.NewRouter()
+	Router.HandleFunc("/auth/login", controllers.LoginHandler)
+	Router.HandleFunc("/auth/loginauth", controllers.LoginAuthHandler)
+	Router.HandleFunc("/auth/logout", controllers.LogoutHandler)
+	Router.HandleFunc("/auth/register", controllers.RegisterHandler)
+	Router.HandleFunc("/auth/registerauth", controllers.RegisterAuthHandler)
+
+	Router.HandleFunc("/about", controllers.Auth(controllers.AboutHandler))
+	Router.HandleFunc("/welcome", controllers.Auth(controllers.WelcomeHandler))
+	Router.HandleFunc("/user/data", controllers.GetClientData)
+	Router.HandleFunc("/user/dashboard", controllers.Auth(controllers.UserDashboard))
+
+	// actions
+	Router.HandleFunc("/action/{action}", controllers.ActionHandler)
+	Router.HandleFunc("/user/forward", controllers.Forward)
+	Router.HandleFunc("/user/back", controllers.Back)
+	Router.HandleFunc("/user/create/{id}", controllers.CreateSimulation)
+
+	// Table displays
+	Router.HandleFunc("/commodities", controllers.Auth(controllers.ShowCommodities))
+	Router.HandleFunc("/industries", controllers.Auth(controllers.ShowIndustries))
+	Router.HandleFunc("/classes", controllers.Auth(controllers.ShowClasses))
+	Router.HandleFunc("/industry_stocks", controllers.Auth(controllers.ShowIndustryStocks))
+	Router.HandleFunc("/class_stocks", controllers.Auth(controllers.ShowClassStocks))
+	Router.HandleFunc("/commodity", controllers.Auth(controllers.ShowCommodity))
+	Router.HandleFunc("/industry", controllers.Auth(controllers.ShowIndustry))
+	Router.HandleFunc("/trace", controllers.Auth(controllers.ShowTrace))
+	Router.HandleFunc("/index", controllers.Auth(controllers.ShowIndexPage))
+	Router.HandleFunc("/", controllers.Auth(controllers.ShowIndexPage))
+
+	Router.NotFoundHandler = http.HandlerFunc(controllers.NotFound)
+
+}

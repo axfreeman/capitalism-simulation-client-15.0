@@ -1,0 +1,44 @@
+<div class="w3-section w3-card-4 w3-serif" style="width:fit-content;  margin:auto">
+  <header class="w3-container w3-blue">
+    <h3 class="w3-center"> Classes </h3>
+  </header>
+  <table class="table table-striped w-auto" id=classes>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th style="text-align:center">Necessities<br>(Size)</th>
+        <th style="text-align:center">Necessities<br>(Value)</th>
+        <th style="text-align:center">Necessities<br>(Price)</th>
+        <th style="text-align:center">Supply<br>Size</th>
+        <th style="text-align:center">Supply<br>Value</th>
+        <th style="text-align:center">Supply<br>Price</th>
+        <th>Population</th>
+        <th style="text-align:center">Participation<br>Ratio</th>
+        <th  style="text-align:center">Consumption<br>Ratio</th>
+        <th>Revenue</th>
+        <th>Assets</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!--Loop over the classes -->
+      {{range .ClassViews }}
+
+      <tr>
+        <td><a href="/class/{{.Id}}">{{ .Name }}</a></td>
+        {{ .ConsumptionStockSize.DisplayRounded }}
+        {{ .ConsumptionStockValue.DisplayRounded }}
+        {{ .ConsumptionStockPrice.DisplayRounded }}
+        {{ .SalesStockPrice.DisplayRounded }}
+        {{ .SalesStockValue.DisplayRounded }}
+        {{ .SalesStockPrice.DisplayRounded }}
+        <td style="text-align:right">{{ .Population }}</td>
+        <td style="text-align:right">{{ .Participation_Ratio }}</td>
+        <td style="text-align:right">{{ .Consumption_Ratio }}</td>
+        {{ .Revenue.DisplayRounded }}
+        {{ .Assets.DisplayRounded }}
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+  </div>
+  
