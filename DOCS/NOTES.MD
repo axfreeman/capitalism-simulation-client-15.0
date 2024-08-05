@@ -5,6 +5,7 @@
 * hashed passwords should be recorded in the server: see `LoadRegisteredUsers`
 
 ##Bugs
-* currently fails to display tables after taking an action (which it once did)
+* currently fails to display tables after taking an action (which it once did)  
+* Does not resynchronise with the api server if a user login fails, which it should do.  
 
 
