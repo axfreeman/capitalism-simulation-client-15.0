@@ -175,7 +175,9 @@ func LoginAuthHandler(w http.ResponseWriter, r *http.Request) {
 
 	// display the welcome screen
 	user.CurrentPage = "welcome.html"
-	Tpl.ExecuteTemplate(w, user.CurrentPage, user.TemplateData(""))
+	// Tpl.ExecuteTemplate(w, user.CurrentPage, user.TemplateData(""))
+	templateData := models.MessageData{Message: "", Username: user.UserName}
+	Tpl.ExecuteTemplate(w, user.CurrentPage, templateData)
 }
 
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {

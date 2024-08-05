@@ -1,5 +1,7 @@
 package models
 
+import "gorilla-client/utils"
+
 // Wrappers for lists of Tables
 
 // List of the user's Simulations.
@@ -74,10 +76,32 @@ func (u User) Traces(timeStamp int) *[]Trace {
 // supplies outputData to be passed into Templates for display
 //
 //	u: a user
-//	returns: the output data for this user at the current simulation
+//
+//	returns:
+//      if the user has no simulations, just the template list
+//      otherwise, the output data the users current simulation
 func (u *User) TemplateData(message string) OutputData {
 	slist := u.SimulationsList()
 	state := u.Get_current_state()
+	utils.TraceInfof(utils.BrightYellow, "Entering TemplateData for user %s with simulationID %d", u.UserName, u.CurrentSimulationID)
+	if u.CurrentSimulationID == 0 {
+		utils.TraceInfo(utils.BrightYellow, "User has no simulations")
+		return OutputData{
+			Title:           "Hello",
+			Simulations:     nil,
+			Templates:       &TemplateList,
+			Count:           0,
+			Username:        u.UserName,
+			State:           state,
+			CommodityViews:  nil,
+			IndustryViews:   nil,
+			ClassViews:      nil,
+			Industry_Stocks: nil,
+			Class_Stocks:    nil,
+			Trace:           nil,
+			Message:         message,
+		}
+	}
 	return OutputData{
 		Title:           "Hello",
 		Simulations:     slist,

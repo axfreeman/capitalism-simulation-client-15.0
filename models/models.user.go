@@ -95,6 +95,13 @@ type OutputData struct {
 	Message         string
 }
 
+// Simplified message type to pass into templates
+// without calculating Views
+type MessageData struct {
+	Message  string
+	Username string
+}
+
 func (u *User) AsString() string {
 	if u == nil {
 		return "no such user"

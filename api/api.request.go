@@ -10,6 +10,7 @@ import (
 	"gorilla-client/db"
 	"gorilla-client/models"
 	"gorilla-client/utils"
+	"log"
 
 	"errors"
 	"fmt"
@@ -173,7 +174,7 @@ func LoadRegisteredUsers() error {
 	utils.TraceInfo(utils.BrightCyan, "Loading remote users")
 	_, err := AdminGetRequest(config.Config.ApiSource+`/admin/users`, &RegisteredUserList)
 	if err != nil {
-		return fmt.Errorf("server failed to return user data citing error %v", err)
+		log.Fatal("server failed to return user data. Cannot continue")
 	}
 
 	for _, item := range RegisteredUserList {
